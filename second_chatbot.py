@@ -23,3 +23,43 @@ regle_v2 = [
     ["BJ", r"\bBonjour\b", "Bonjour mon ami!", None, 2, False],
     ["au_revoir", r"\bAu revoir\b", "Au revoir ca m'a fait plaisir de parler avec toi", None, 1, False]
 ]
+
+
+
+enregistrement = {}
+the_name = ""
+fois = 0
+x = ""
+
+while x.lower() != "stop":
+    if fois < 1:
+        print("Parle avec ZAGROS...")
+        the_name = input("Mais d'abord donne ton nom >>> ")
+        fois += 1
+    
+    x = input(f"{the_name} >>> ")
+    if x.lower() == "stop":
+        print(f"ZAGROS >>> Au revoir {the_name}")
+        break
+
+    trouve = False
+    regle_v2.sort(key=lambda x: x[4], reverse=True)
+
+    for i in range(len(regle_v2)):
+        match = re.search(regle_v2[i][1], x, re.IGNORECASE)
+        if match:
+            if regle_v2[i][3] is not None:
+                resultat = regle_v2[i][3](match)
+                print("ZAGROS >>>", resultat[0])
+                
+                if regle_v2[i][5]:
+                    enregistrement[regle_v2[i][0]] = resultat[1]
+            
+            elif regle_v2[i][2] is not None:
+                print("ZAGROS >>>", regle_v2[i][2])
+            
+            trouve = True
+            break
+            
+    if not trouve:
+        print("ZAGROS >>> Je ne vous ai pas compris.")
